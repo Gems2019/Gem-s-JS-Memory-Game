@@ -63,10 +63,7 @@ body {
 
 #gameArea {
     position: relative;
-    min-height: 400px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    height: 60vh; /* or 70vh, adjust as needed */
     margin-bottom: 20px;
 }
 
@@ -106,7 +103,8 @@ body {
     text-align: center;
     font-size: 20px;
     font-weight: bold;
-    min-height: 30px;
+    min-height: 30px;      /* Ensures it is always visible */
+    margin: 20px 0;        /* Adds space above and below */
     padding: 15px;
     background-color: white;
     border-radius: 10px;

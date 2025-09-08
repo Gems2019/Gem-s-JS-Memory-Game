@@ -37,6 +37,11 @@ class GameButton {
         return this.element;
     }
 
+    setOriginalPosition(x, y) {
+        this.originalPosition = { x, y };
+        this.setPosition(x, y);
+    }    
+    
     setPosition(x, y) {
         this.currentPosition = { x, y };
         if (this.element) {
@@ -45,10 +50,7 @@ class GameButton {
         }
     }
 
-    setOriginalPosition(x, y) {
-        this.originalPosition = { x, y };
-        this.setPosition(x, y);
-    }
+
 
     hideNumber() {
         this.isNumberVisible = false;
@@ -112,51 +114,6 @@ class WindowManager {
             x: Math.floor(Math.random() * maxX),
             y: Math.floor(Math.random() * maxY)
         };
-    }
-
-    getRandomPositionWithoutCollision(existingPositions, maxAttempts = 50) {
-        this.updateDimensions();
-        const maxX = Math.max(0, this.width - BUTTON_WIDTH);
-        const maxY = Math.max(0, this.height - BUTTON_HEIGHT);
-        
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-            const newPosition = {
-                x: Math.floor(Math.random() * maxX),
-                y: Math.floor(Math.random() * maxY)
-            };
-            
-            // Check if this position collides with any existing button
-            let hasCollision = false;
-            for (const existingPos of existingPositions) {
-                if (this.checkCollision(newPosition, existingPos)) {
-                    hasCollision = true;
-                    break;
-                }
-            }
-            
-            if (!hasCollision) {
-                return newPosition;
-            }
-        }
-        
-        // If we can't find a non-colliding position after max attempts,
-        // return a random position (fallback to prevent infinite loops)
-        return {
-            x: Math.floor(Math.random() * maxX),
-            y: Math.floor(Math.random() * maxY)
-        };
-    }
-
-    checkCollision(pos1, pos2) {
-        // Add some padding to prevent buttons from being too close
-        const padding = 10;
-        const effectiveWidth = BUTTON_WIDTH + padding;
-        const effectiveHeight = BUTTON_HEIGHT + padding;
-        
-        return !(pos1.x + effectiveWidth < pos2.x ||
-                pos2.x + effectiveWidth < pos1.x ||
-                pos1.y + effectiveHeight < pos2.y ||
-                pos2.y + effectiveHeight < pos1.y);
     }
 
     getInitialPositions(buttonCount) {
@@ -308,7 +265,7 @@ class GameController {
         const newPositions = [];
         
         this.buttons.forEach(button => {
-            const newPosition = this.windowManager.getRandomPositionWithoutCollision(newPositions);
+            const newPosition = this.windowManager.getRandomPosition();
             newPositions.push(newPosition);
             button.setPosition(newPosition.x, newPosition.y);
         });
